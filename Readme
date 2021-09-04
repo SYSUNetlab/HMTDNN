@@ -3,5 +3,5 @@ Last changed: 2021-09-04
 Author: Yu Liang
 
     This repo provides the codes of paper “Content Identification for Network Traffic Based on Time-scale Signal Modeling”.
-    The HMTDNN directary includes the data samples and MATLAB codes related to HMT-DNN and classifier, the comments are added in the files.
+    The HMTDNN directary includes the data samples and MATLAB codes related to HMT-DNN and classifier.
 
