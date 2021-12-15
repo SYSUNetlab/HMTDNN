@@ -1,12 +1,11 @@
     function trans = Static_state(ss, Q)
-
-    % 函数用于统计检测时输出序列的状态转移矩阵
+    % STATIC_STATE calculate the state transition matrix by analyzing the state tree set
     % input:
-    % ss: 最优状态序列
-    % Q ：状态的数目
+    % ss: state tree
+    % Q: number of states
 
-    % output：
-    % trans，trans_tree：状态转移矩阵
+    % output:
+    % trans, trans_tree: state transition matrix
     
     trans = zeros(Q,Q);
     for i=2:size(ss,2)
