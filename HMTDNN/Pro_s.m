@@ -1,12 +1,11 @@
 function Ps = Pro_s(series, tree)
-
-%%%  º¯ÊıÓÃÓÚ¼ÆËãP(s|lanbuda)£¬¼´ÓÃÓÚ¼ì²âµÄÑù±¾µÃµ½µÄ×îÓÅĞòÁĞÓëÑµÁ·Ñù±¾ÊÕÁ²Ê±×îÓÅĞòÁĞµÄ×éºÏ
-% input£º
-% series: ÑµÁ·ÊÕÁ²Ê±µÄ×îÓÅĞòÁĞ
-% tree:¼ì²âÑù±¾µÃµ½µÄĞòÁĞ
-
-% output:
-% Ps:ÓÃÓÚ±íÊ¾seriesÓëtreeÆ¥Åä³Ì¶ÈµÄÖ¸±ê¡£\
+% PRO_S  Calculate the similarity of state trees.
+% Inputsï¼š
+% series: optimal state tree
+% tree: detecting state tree
+%
+% Output:
+% Ps:the similarity
     num = 0;
     for i=1:size(series,2)
         if series(i) == tree(i)
