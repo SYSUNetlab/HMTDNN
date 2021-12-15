@@ -1,24 +1,14 @@
 function [ pi, trans, trans_tree, State_samples, State_path_samples ] = initialPIandA0203( data, Q, scale)
-% Í¨¹ı¼äµÄ¼ÆÊıµÄ·½·¨³õÊ¼»¯ HMM µÄ²ÎÊı
-% ÕâÀïÖ÷Òª¶Ô¡¾³õÊ¼×´Ì¬¾ØÕó¡¿ºÍ¡¾×´Ì¬×ªÒÆ¾ØÕó¡¿½øĞĞ³õÊ¼»¯
-% ¼´³õÊ¼»¯ ¦Ğ ºÍ A¾ØÕó
+% INITIALPIANDA0203 Initialize the parameters of HMT, i.e., pi, tran, trans
 %
-% ÊäÈë£º
-% data£ºÊı¾İ,ÈôdataÎªÊÖ¹¤±ê¼ÇµÄ×´Ì¬£¬ÔòĞèÒª¸ù¾İËùÓĞµÄÌØÕ÷µÄ×´Ì¬±ê¼ÇÉèÖÃÑù±¾µÄ×´Ì¬£»ÈôdataÎªÊ¹ÓÃkmedoisd±ê¼ÇµÄ×´Ì¬£¬ÔòÖ±½ÓÊ¹ÓÃ¼´¿É
-% Q£º×´Ì¬¸öÊı£¬¼´¾ÛÀàµÄÀà±ğÊıÄ¿
+% Inputs:
+% data: State set
+% Q: the number of states
 %
-% Êä³ö£º
-% pi£º³õÊ¼×´Ì¬¾ØÕó
-% trans£ºÃ¿²ãµÚÒ»¸ö½Úµã×´Ì¬×ªÒÆ¾ØÕóA(m,n)
-% trans_tree£ºÃ¿Ò»²ã³ıµÚÒ»¸ö½ÚµãµÄ×´Ì¬×ªÒÆ¾ØÕóA(m,n,q)
-% 2020\08\23 ĞŞ¸Ä£ºÌí¼Ó³ß¶È±ä»¯Ìõ¼şÏÂµÄÇéĞÎ
-% 2021/02/03 ĞŞ¸Ä£ºÖ»¿¼ÂÇ¸ß³ß¶È
+% Outputsï¼š
+% pi, trans, trans_tree: the parameters of HMT
 % 
 % ============================================
-
-%%% === ÈôÎªkmedoisdÉú³É£¬Ö»ĞèÒª´æÈ¡ÎªÊ÷
-
-%     [~,level] = judge_Power(size(data,2),2);% ÅĞ¶ÏĞ¡²¨ÏµÊıµÄÆµ´øÊı£¬Ê÷µÄÉî¶È
     State_tree = {};
     State_samples = {};
     State_path = [];
@@ -49,8 +39,8 @@ function [ pi, trans, trans_tree, State_samples, State_path_samples ] = initialP
         pi(1,State_samples{i}{1,1}) = pi(1,State_samples{i}{1,1}) + 1;
         for j=1:scale
             for h=1:2^(j-1)
-                if judge_Power(h+2^(j-1)-1,2)~=1 && j~=1 % Ğ¡²¨Ê÷Ã¿Ò»²ãµÄµÚÒ»¸ö½ÚµãÖ»ÓĞÀ´×Ô¸¸½ÚµãµÄ×ªÒÆ¸ÅÂÊ,ÔÙ¿¼ÂÇÁ½¸ö·½ÏòµÄ×ªÒÆ¸ÅÂÊÊ±¿ÉÒÔ²»ÓÃ¿¼ÂÇ
-                    if mod(h+2^(j-1),2)==0 % È·¶¨¸¸½ÚµãÎ»ÖÃ
+                if judge_Power(h+2^(j-1)-1,2)~=1 && j~=1 % root
+                    if mod(h+2^(j-1),2)==0 
                         p_index = (h+2^(j-1))/2 - 2^(j-2);
                         trans_tree(State_samples{i}{j}(1,h-1), State_samples{i}{j-1}(1,p_index), State_samples{i}{j}(1,h)) = ... % a(mnq)
                         trans_tree(State_samples{i}{j}(1,h-1), State_samples{i}{j-1}(1,p_index), State_samples{i}{j}(1,h)) + 1;
@@ -61,31 +51,31 @@ function [ pi, trans, trans_tree, State_samples, State_path_samples ] = initialP
                     end
                 else
                     if j~=scale
-                        trans(State_samples{i}{j}(1,h),State_samples{i}{j+1}(1,1)) = ... % ³ıÁËµÚÆß²ãÆäËû²ã×î×ó±ß½Úµã¾ù¿É³ÉÎª×Ó½Úµã
+                        trans(State_samples{i}{j}(1,h),State_samples{i}{j+1}(1,1)) = ... 
                         trans(State_samples{i}{j}(1,h),State_samples{i}{j+1}(1,1)) + 1;
                     end
                 end
             end
         end 
     end
-    for i=1:length(State_samples)% ÌáÈ¡×î×ó²àÂí¶û¿É·òÁ´µÄ×´Ì¬¼¯
+    for i=1:length(State_samples)
         for j=1:size(State_samples{i},2)
             State_path(j) = State_samples{i}{j}(1,1);
         end
-        State_path_samples{i} = State_path; % ´æ´¢ËùÓĞµÄ×î×ó²àÂí¶û¿É·òÁ´
+        State_path_samples{i} = State_path; 
         State_path = [];
     end
-    % ³õÊ¼»¯pi
+    % pi
     piSum = sum(pi);
     pi = pi ./ piSum;
-    % ³õÊ¼»¯a(mn)
+    % a(mn)
     transSum = sum(trans, 2);
     for i = 1:length(transSum)
         trans(i, :) = trans(i, :) ./ transSum(i);
     end
     
     
-    % ³õÊ¼»¯a(mnq)
+    % a(mnq)
     trans_treeSum = sum(trans_tree,3);
     for j=1:size(trans_tree,2)
         trans_tree(:,:,j) = trans_tree(:,:,j) ./ trans_treeSum;
@@ -100,7 +90,7 @@ function [ pi, trans, trans_tree, State_samples, State_path_samples ] = initialP
     
     trans(isnan(trans)) = 0;
     trans_tree(isnan(trans_tree)) = 0;
-    % ¡¾±£Ö¤³õÊ¼»¯µÄ×ªÒÆ¾ØÕóÖĞÃ»ÓĞ0¡¿
+    
     [row, col] = find(trans==0);
     if length(row)~=0
         for i=1:length(row)
