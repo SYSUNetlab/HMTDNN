@@ -1,7 +1,7 @@
 function StateProinData( data )
-% 展示数据集中状态的比例
+% show the proportion of each state
     display(sprintf('****************************'));
-    display(sprintf('数据集中状态的比例：'));
+    display(sprintf('The proportion of states'));
     tabulate(data)
     display(sprintf('****************************'));
 end
